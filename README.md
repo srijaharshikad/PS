@@ -5,7 +5,7 @@
 A beautiful, interactive wedding website where guests can share photos, videos, and memories from our special day.
 
 ### 🌐 **Live Website**
-Visit our wedding website: **[Your GitHub Pages URL will be here]**
+Visit our wedding website: **https://srijaharshikad.github.io/PS/**
 
 ### ✨ **Features**
 - 🏠 **Beautiful Home Page** - Elegant design with wedding details
