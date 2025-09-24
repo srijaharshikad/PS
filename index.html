@@ -971,52 +971,11 @@
             }
         });
 
-        // Add some sample data for demonstration
-        if (memories.length === 0 && wishes.length === 0) {
-            // Add sample memories
-            const sampleMemories = [
-                {
-                    id: 1,
-                    name: "Rajesh",
-                    message: "Beautiful couple! Wishing you both happiness forever! 💕",
-                    type: "image",
-                    data: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
-                    timestamp: new Date().toISOString()
-                },
-                {
-                    id: 2,
-                    name: "Priya",
-                    message: "Such a lovely engagement ceremony! 🎉",
-                    type: "image", 
-                    data: "https://images.unsplash.com/photo-1519741497674-611481863552?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
-                    timestamp: new Date().toISOString()
-                }
-            ];
-            
-            const sampleWishes = [
-                {
-                    id: 1,
-                    name: "Aunt Lakshmi",
-                    message: "May your love story be filled with endless joy, laughter, and beautiful moments. Congratulations to both of you! 🙏✨",
-                    timestamp: new Date().toISOString()
-                },
-                {
-                    id: 2,
-                    name: "College Friends",
-                    message: "We're so happy for you both! Can't wait to celebrate your special day. Wishing you a lifetime of love and happiness! 🎊💕",
-                    timestamp: new Date().toISOString()
-                }
-            ];
-            
-            memories = sampleMemories;
-            wishes = sampleWishes;
-            localStorage.setItem('weddingMemories', JSON.stringify(memories));
-            localStorage.setItem('weddingWishes', JSON.stringify(wishes));
-            
-            updateStats();
-            displayGallery();
-            displayWishes();
-        }
+        // Clear any existing sample data to start fresh
+        localStorage.removeItem('weddingMemories');
+        localStorage.removeItem('weddingWishes');
+        memories = [];
+        wishes = [];
     </script>
 </body>
 </html>
