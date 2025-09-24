@@ -125,7 +125,13 @@
             border: 5px solid white;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
             margin: 0 auto 2rem;
-            background: url('https://images.unsplash.com/photo-1511285560929-80b456fea0bc?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80') center/cover;
+            background: linear-gradient(135deg, #ec4899, #8b5cf6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            text-align: center;
             animation: float 3s ease-in-out infinite;
         }
         
@@ -580,11 +586,14 @@
     <!-- Hero Section -->
     <section id="home" class="hero">
         <div class="hero-content">
-            <div class="couple-photo"></div>
+            <div class="couple-photo" id="couplePhoto" onclick="uploadCouplePhoto()">
+                <div>Click to add<br>couple photo</div>
+            </div>
+            <input type="file" id="couplePhotoInput" accept="image/*" style="display: none;">
             <div class="heart">💕</div>
             <h1 class="couple-names">Prathyusha & Sravan</h1>
             <p class="engagement-date">💍 Engagement: 10:00 AM</p>
-            <p class="venue">📍 Itihaas</p>
+            <p class="venue">📍 <a href="https://share.google/AD4JvxEL5taE2IVYp" target="_blank" style="color: white; text-decoration: underline;">Itihaas</a></p>
             <p class="story">Two hearts, one love story. Join us as we celebrate the beginning of our forever journey together.</p>
             <div class="buttons">
                 <a href="#gallery" class="btn btn-secondary">
@@ -740,11 +749,13 @@
             displayGallery();
             displayWishes();
             setupEventListeners();
+            loadCouplePhoto();
         });
 
         function setupEventListeners() {
             // File input change
             document.getElementById('fileInput').addEventListener('change', handleFileSelect);
+            document.getElementById('couplePhotoInput').addEventListener('change', handleCouplePhotoSelect);
             
             // Drag and drop
             const uploadArea = document.querySelector('.upload-area');
@@ -762,6 +773,39 @@
                     }
                 });
             });
+        }
+
+        function uploadCouplePhoto() {
+            document.getElementById('couplePhotoInput').click();
+        }
+
+        function handleCouplePhotoSelect(event) {
+            const file = event.target.files[0];
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const couplePhoto = document.getElementById('couplePhoto');
+                    couplePhoto.style.backgroundImage = `url(${e.target.result})`;
+                    couplePhoto.style.backgroundSize = 'cover';
+                    couplePhoto.style.backgroundPosition = 'center';
+                    couplePhoto.innerHTML = '';
+                    
+                    // Save to localStorage
+                    localStorage.setItem('couplePhoto', e.target.result);
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function loadCouplePhoto() {
+            const savedPhoto = localStorage.getItem('couplePhoto');
+            if (savedPhoto) {
+                const couplePhoto = document.getElementById('couplePhoto');
+                couplePhoto.style.backgroundImage = `url(${savedPhoto})`;
+                couplePhoto.style.backgroundSize = 'cover';
+                couplePhoto.style.backgroundPosition = 'center';
+                couplePhoto.innerHTML = '';
+            }
         }
 
         function handleFileSelect(event) {
