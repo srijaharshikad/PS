@@ -1,1 +1,437 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"/><link rel="icon" href="/favicon.ico"/><meta name="viewport" content="width=device-width,initial-scale=1"/><meta name="theme-color" content="#ec4899"/><meta name="description" content="Prathyusha & Sravan Wedding Website - Share your beautiful memories"/><link rel="apple-touch-icon" href="/logo192.png"/><link rel="manifest" href="/manifest.json"/><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"><title>Prathyusha & Sravan Wedding</title><style>body{font-family:Poppins,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:linear-gradient(135deg,#ffecd2 0,#fcb69f 100%);margin:0;padding:0;min-height:100vh}.loading{display:flex;align-items:center;justify-content:center;min-height:100vh;flex-direction:column}.loading h1{font-family:'Dancing Script',cursive;font-size:3rem;color:#ec4899;margin-bottom:1rem;text-align:center}.loading p{color:#6b7280;font-size:1.1rem}.spinner{border:3px solid #f3f3f3;border-top:3px solid #ec4899;border-radius:50%;width:40px;height:40px;animation:spin 1s linear infinite;margin-bottom:1rem}@keyframes spin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}#root:not(:empty)+.loading{display:none}</style><script defer="defer" src="/static/js/main.638517ac.js"></script><link href="/static/css/main.e9e3e215.css" rel="stylesheet"></head><body><noscript>You need to enable JavaScript to run this app.</noscript><div id="root"></div><div class="loading"><div class="spinner"></div><h1>Prathyusha & Sravan</h1><p>Loading your beautiful wedding website...</p></div></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prathyusha & Sravan Wedding</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: linear-gradient(
+                135deg,
+                rgba(255, 236, 210, 0.9) 0%,
+                rgba(252, 182, 159, 0.9) 100%
+            ),
+            url('https://images.unsplash.com/photo-1519741497674-611481863552?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            position: relative;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.3);
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            padding: 2rem;
+        }
+        
+        .heart {
+            font-size: 4rem;
+            color: #ec4899;
+            margin-bottom: 2rem;
+            animation: heartbeat 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        .couple-names {
+            font-family: 'Dancing Script', cursive;
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .wedding-date {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            opacity: 0.9;
+        }
+        
+        .venue {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+        
+        .story {
+            font-size: 1.2rem;
+            margin: 0 auto 3rem;
+            line-height: 1.6;
+            opacity: 0.95;
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            font-size: 1rem;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: white;
+            color: #374151;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        
+        .section {
+            padding: 5rem 2rem;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .section-subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #6b7280;
+            max-width: 600px;
+            margin: 0 auto 3rem;
+        }
+        
+        .timeline {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .timeline-item {
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .timeline-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+        
+        .timeline-time {
+            color: #ec4899;
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .timeline-event {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+        }
+        
+        .timeline-description {
+            color: #6b7280;
+            line-height: 1.6;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-icon {
+            width: 4rem;
+            height: 4rem;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 1.5rem;
+            color: white;
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            color: #6b7280;
+            font-weight: 500;
+        }
+        
+        .upload-section {
+            background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
+            color: white;
+            text-align: center;
+        }
+        
+        .upload-section .section-title {
+            color: white;
+            background: none;
+            -webkit-text-fill-color: white;
+        }
+        
+        .upload-section .section-subtitle {
+            color: rgba(255,255,255,0.9);
+        }
+        
+        .footer {
+            background: #1f2937;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        @media (max-width: 768px) {
+            .couple-names {
+                font-size: 2.5rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="heart">💕</div>
+            <h1 class="couple-names">Prathyusha & Sravan</h1>
+            <p class="wedding-date">📅 November 7, 2025</p>
+            <p class="venue">📍 Ithaas</p>
+            <p class="story">Two hearts, one love story. Join us as we celebrate the beginning of our forever journey together.</p>
+            <div class="buttons">
+                <a href="#timeline" class="btn btn-secondary">
+                    📅 View Timeline
+                </a>
+                <a href="#memories" class="btn btn-primary">
+                    💕 Share Memories
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="section" style="background: white;">
+        <div class="container">
+            <h2 class="section-title">Our Journey in Numbers</h2>
+            <p class="section-subtitle">See how our friends and family are sharing in our special moments</p>
+            
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-icon">📸</div>
+                    <div class="stat-number">24</div>
+                    <div class="stat-label">Photos</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-number">12</div>
+                    <div class="stat-label">Contributors</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">💕</div>
+                    <div class="stat-number">30</div>
+                    <div class="stat-label">Memories</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">⭐</div>
+                    <div class="stat-number">8</div>
+                    <div class="stat-label">Recent</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Timeline Section -->
+    <section id="timeline" class="section">
+        <div class="container">
+            <h2 class="section-title">Wedding Timeline</h2>
+            <p class="section-subtitle">Join us for a celebration of love, tradition, and joy</p>
+            
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-time">🎨 10:00 AM</div>
+                    <div class="timeline-event">Mehendi Ceremony</div>
+                    <div class="timeline-description">Beautiful henna designs and celebrations</div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-time">🎵 6:00 PM</div>
+                    <div class="timeline-event">Sangam Ceremony</div>
+                    <div class="timeline-description">Musical evening with family and friends</div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-time">💒 7:00 AM</div>
+                    <div class="timeline-event">Wedding Ceremony</div>
+                    <div class="timeline-description">Sacred union of two souls</div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-time">🎉 12:00 PM</div>
+                    <div class="timeline-event">Reception</div>
+                    <div class="timeline-description">Celebration with delicious food and dance</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Upload Section -->
+    <section id="memories" class="section upload-section">
+        <div class="container">
+            <h2 class="section-title">Share Your Memories</h2>
+            <p class="section-subtitle">Help us capture every beautiful moment of our special day. Your photos and videos make our celebration even more memorable!</p>
+            
+            <div style="background: rgba(255,255,255,0.1); padding: 2rem; border-radius: 1rem; max-width: 600px; margin: 0 auto;">
+                <h3 style="font-size: 1.5rem; margin-bottom: 1rem;">📸 How to Share:</h3>
+                <div style="text-align: left; max-width: 400px; margin: 0 auto;">
+                    <p style="margin-bottom: 0.5rem;">1. 📱 Take photos and videos during our ceremonies</p>
+                    <p style="margin-bottom: 0.5rem;">2. 💌 Add your name and a sweet message</p>
+                    <p style="margin-bottom: 0.5rem;">3. 📤 Upload them to our gallery</p>
+                    <p style="margin-bottom: 1rem;">4. ✨ See them displayed beautifully for everyone!</p>
+                </div>
+                
+                <div style="background: rgba(255,255,255,0.2); padding: 1.5rem; border-radius: 0.5rem; margin-top: 1.5rem;">
+                    <p style="font-weight: 600; margin-bottom: 0.5rem;">📧 Email your memories to:</p>
+                    <p style="font-size: 1.2rem; color: #fef3c7;">prathyusha.sravan.wedding@gmail.com</p>
+                    <p style="font-size: 0.9rem; margin-top: 0.5rem; opacity: 0.8;">Include your name and a message!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p style="font-size: 1.2rem; margin-bottom: 0.5rem;">💕 Made with Love for Prathyusha & Sravan</p>
+            <p style="opacity: 0.7;">Thank you for being part of our journey! 🎊</p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+        
+        // Add some interactive animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe timeline items and stat cards
+        document.querySelectorAll('.timeline-item, .stat-card').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'all 0.6s ease';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
