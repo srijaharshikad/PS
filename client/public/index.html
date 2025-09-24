@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#ec4899" />
+    <meta
+      name="description"
+      content="Prathyusha & Sravan Wedding Website - Share your beautiful memories"
+    />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <title>Prathyusha & Sravan Wedding</title>
+    
+    <style>
+      /* Critical CSS for immediate rendering */
+      body {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+        background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+      }
+      
+      .loading {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        flex-direction: column;
+      }
+      
+      .loading h1 {
+        font-family: 'Dancing Script', cursive;
+        font-size: 3rem;
+        color: #ec4899;
+        margin-bottom: 1rem;
+        text-align: center;
+      }
+      
+      .loading p {
+        color: #6b7280;
+        font-size: 1.1rem;
+      }
+      
+      .spinner {
+        border: 3px solid #f3f3f3;
+        border-top: 3px solid #ec4899;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        animation: spin 1s linear infinite;
+        margin-bottom: 1rem;
+      }
+      
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+      
+      /* Hide loading once React loads */
+      #root:not(:empty) + .loading {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    
+    <!-- Fallback loading screen -->
+    <div class="loading">
+      <div class="spinner"></div>
+      <h1>Prathyusha & Sravan</h1>
+      <p>Loading your beautiful wedding website...</p>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,92 @@
+.App {
+  text-align: center;
+}
+
+/* Custom styles for wedding theme */
+.hero-section {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 236, 210, 0.9) 0%,
+    rgba(252, 182, 159, 0.9) 100%
+  ),
+  url('https://images.unsplash.com/photo-1519741497674-611481863552?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+.timeline-item {
+  position: relative;
+  padding: 20px;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  margin: 20px 0;
+  transition: all 0.3s ease;
+}
+
+.timeline-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: 3px solid white;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3);
+}
+
+.upload-preview {
+  max-width: 200px;
+  max-height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.gallery-item {
+  break-inside: avoid;
+  margin-bottom: 15px;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+}
+
+.gallery-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+.gallery-item img,
+.gallery-item video {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.gallery-item .overlay {
+  padding: 15px;
+  background: white;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .hero-section {
+    background-attachment: scroll;
+  }
+  
+  .timeline-item::before {
+    left: -8px;
+    width: 16px;
+    height: 16px;
+  }
+}
