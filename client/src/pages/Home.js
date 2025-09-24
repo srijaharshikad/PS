@@ -15,8 +15,29 @@ const Home = () => {
 
   const fetchWeddingDetails = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/wedding-details');
-      setWeddingDetails(response.data.data);
+      // Use mock data for GitHub Pages
+      const mockWeddingDetails = {
+        bride: 'Prathyusha',
+        groom: 'Sravan',
+        weddingDate: '2025-11-07',
+        venue: 'Ithaas',
+        timeline: [
+          { time: '10:00 AM', event: 'Mehendi Ceremony', description: 'Beautiful henna designs and celebrations' },
+          { time: '6:00 PM', event: 'Sangam Ceremony', description: 'Musical evening with family and friends' },
+          { time: '7:00 AM', event: 'Wedding Ceremony', description: 'Sacred union of two souls' },
+          { time: '12:00 PM', event: 'Reception', description: 'Celebration with delicious food and dance' }
+        ],
+        story: 'Two hearts, one love story. Join us as we celebrate the beginning of our forever journey together.',
+        location: {
+          name: 'Ithaas',
+          address: 'Wedding Venue Address',
+          coordinates: { lat: 17.4065, lng: 78.4772 }
+        }
+      };
+
+      // Simulate API delay
+      await new Promise(resolve => setTimeout(resolve, 500));
+      setWeddingDetails(mockWeddingDetails);
     } catch (error) {
       console.error('Error fetching wedding details:', error);
     }
@@ -24,8 +45,18 @@ const Home = () => {
 
   const fetchStats = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/gallery/stats');
-      setStats(response.data.data);
+      // Use mock stats for GitHub Pages
+      const mockStats = {
+        totalItems: 24,
+        totalPhotos: 18,
+        totalVideos: 6,
+        uniqueGuests: 12,
+        recentUploads: 3
+      };
+
+      // Simulate API delay
+      await new Promise(resolve => setTimeout(resolve, 500));
+      setStats(mockStats);
     } catch (error) {
       console.error('Error fetching stats:', error);
     }

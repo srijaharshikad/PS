@@ -4,7 +4,9 @@ import toast from 'react-hot-toast';
 
 const VideoContext = createContext();
 
+// For GitHub Pages deployment, we'll use mock data instead of API calls
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+const IS_GITHUB_PAGES = !process.env.REACT_APP_API_URL;
 
 // Action types
 const VIDEO_ACTIONS = {
@@ -141,6 +143,46 @@ export function VideoProvider({ children }) {
   const fetchTemplates = useCallback(async () => {
     try {
       dispatch({ type: VIDEO_ACTIONS.SET_LOADING, payload: true });
+      
+      // For GitHub Pages, use mock data immediately
+      if (IS_GITHUB_PAGES) {
+        const mockTemplates = [
+          {
+            id: 'elegant-engagement',
+            name: 'Elegant Engagement',
+            category: 'engagement',
+            description: 'Sophisticated engagement announcement with elegant typography',
+            duration: 15
+          },
+          {
+            id: 'ghibli-wedding',
+            name: 'Ghibli Style Wedding',
+            category: 'wedding',
+            description: 'Magical Studio Ghibli inspired wedding invitation',
+            duration: 20
+          },
+          {
+            id: 'cinematic-save-date',
+            name: 'Cinematic Save the Date',
+            category: 'save-the-date',
+            description: 'Hollywood-style cinematic save the date video',
+            duration: 18
+          },
+          {
+            id: 'modern-minimalist',
+            name: 'Modern Minimalist',
+            category: 'wedding',
+            description: 'Clean, modern design with minimalist aesthetics',
+            duration: 12
+          }
+        ];
+        
+        // Simulate loading delay
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        dispatch({ type: VIDEO_ACTIONS.SET_TEMPLATES, payload: mockTemplates });
+        return;
+      }
+      
       console.log('Fetching templates from:', `${API_BASE_URL}/templates`);
       
       // Add timeout to prevent infinite loading
