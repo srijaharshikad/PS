@@ -125,7 +125,7 @@
             border: 5px solid white;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
             margin: 0 auto 2rem;
-            background: linear-gradient(135deg, #ec4899, #8b5cf6);
+            background: url('https://images.unsplash.com/photo-1606216794074-735e91aa2c92?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80') center/cover;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -133,6 +133,22 @@
             font-size: 1.2rem;
             text-align: center;
             animation: float 3s ease-in-out infinite;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .couple-photo:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+        }
+        
+        .couple-photo.has-image {
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .couple-photo.has-image div {
+            display: none;
         }
         
         @keyframes float {
@@ -587,7 +603,7 @@
     <section id="home" class="hero">
         <div class="hero-content">
             <div class="couple-photo" id="couplePhoto" onclick="uploadCouplePhoto()">
-                <div>Click to add<br>couple photo</div>
+                <div style="background: rgba(0,0,0,0.5); padding: 0.5rem; border-radius: 10px;">Click to update<br>couple photo</div>
             </div>
             <input type="file" id="couplePhotoInput" accept="image/*" style="display: none;">
             <div class="heart">💕</div>
@@ -788,10 +804,21 @@
                     couplePhoto.style.backgroundImage = `url(${e.target.result})`;
                     couplePhoto.style.backgroundSize = 'cover';
                     couplePhoto.style.backgroundPosition = 'center';
-                    couplePhoto.innerHTML = '';
+                    couplePhoto.classList.add('has-image');
+                    couplePhoto.innerHTML = '<div style="background: rgba(0,0,0,0.7); padding: 0.3rem; border-radius: 5px; font-size: 0.9rem; opacity: 0; transition: opacity 0.3s;">Click to change</div>';
+                    
+                    // Show change text on hover
+                    couplePhoto.addEventListener('mouseenter', function() {
+                        this.querySelector('div').style.opacity = '1';
+                    });
+                    couplePhoto.addEventListener('mouseleave', function() {
+                        this.querySelector('div').style.opacity = '0';
+                    });
                     
                     // Save to localStorage
                     localStorage.setItem('couplePhoto', e.target.result);
+                    
+                    alert('Couple photo updated successfully! 💕');
                 };
                 reader.readAsDataURL(file);
             }
@@ -804,7 +831,16 @@
                 couplePhoto.style.backgroundImage = `url(${savedPhoto})`;
                 couplePhoto.style.backgroundSize = 'cover';
                 couplePhoto.style.backgroundPosition = 'center';
-                couplePhoto.innerHTML = '';
+                couplePhoto.classList.add('has-image');
+                couplePhoto.innerHTML = '<div style="background: rgba(0,0,0,0.7); padding: 0.3rem; border-radius: 5px; font-size: 0.9rem; opacity: 0; transition: opacity 0.3s;">Click to change</div>';
+                
+                // Show change text on hover
+                couplePhoto.addEventListener('mouseenter', function() {
+                    this.querySelector('div').style.opacity = '1';
+                });
+                couplePhoto.addEventListener('mouseleave', function() {
+                    this.querySelector('div').style.opacity = '0';
+                });
             }
         }
 
