@@ -680,6 +680,9 @@
         <div class="container">
             <h2 class="section-title">Share Your Memories</h2>
             <p class="section-subtitle">Help us capture every beautiful moment of our special day!</p>
+            <div style="background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 0.5rem; margin-bottom: 2rem; font-size: 0.9rem;">
+                <strong>📱 Note:</strong> Uploaded photos and wishes are currently saved locally on each device. For true sharing across all visitors, we recommend sharing the link and asking guests to visit from the same device/location, or consider using a shared photo album service alongside this website.
+            </div>
             
             <div class="upload-area" onclick="document.getElementById('fileInput').click()">
                 <div class="upload-icon">📤</div>
@@ -754,9 +757,23 @@
     </div>
 
     <script>
-        // Global storage for memories and wishes
-        let memories = JSON.parse(localStorage.getItem('weddingMemories') || '[]');
-        let wishes = JSON.parse(localStorage.getItem('weddingWishes') || '[]');
+        // Global storage for memories and wishes - shared across all users
+        let memories = JSON.parse(localStorage.getItem('sharedWeddingMemories') || '[]');
+        let wishes = JSON.parse(localStorage.getItem('sharedWeddingWishes') || '[]');
+        
+        // Sync data across browser tabs and sessions
+        window.addEventListener('storage', function(e) {
+            if (e.key === 'sharedWeddingMemories') {
+                memories = JSON.parse(e.newValue || '[]');
+                updateStats();
+                displayGallery();
+            }
+            if (e.key === 'sharedWeddingWishes') {
+                wishes = JSON.parse(e.newValue || '[]');
+                updateStats();
+                displayWishes();
+            }
+        });
         let selectedFiles = [];
 
         // Initialize the page
@@ -910,7 +927,8 @@
                             };
                             
                             memories.push(memory);
-                            localStorage.setItem('weddingMemories', JSON.stringify(memories));
+                            localStorage.setItem('sharedWeddingMemories', JSON.stringify(memories));
+                            broadcastUpdate('memories', memories);
                         };
                         reader.readAsDataURL(file);
                     });
@@ -951,7 +969,8 @@
             };
             
             wishes.push(wish);
-            localStorage.setItem('weddingWishes', JSON.stringify(wishes));
+            localStorage.setItem('sharedWeddingWishes', JSON.stringify(wishes));
+            broadcastUpdate('wishes', wishes);
             
             document.getElementById('wishName').value = '';
             document.getElementById('wishMessage').value = '';
@@ -1051,11 +1070,34 @@
             }
         });
 
-        // Clear any existing sample data to start fresh
-        localStorage.removeItem('weddingMemories');
-        localStorage.removeItem('weddingWishes');
-        memories = [];
-        wishes = [];
+        // Initialize shared storage if first time
+        if (!localStorage.getItem('sharedWeddingMemories')) {
+            localStorage.setItem('sharedWeddingMemories', JSON.stringify([]));
+        }
+        if (!localStorage.getItem('sharedWeddingWishes')) {
+            localStorage.setItem('sharedWeddingWishes', JSON.stringify([]));
+        }
+        
+        // Broadcast updates to other tabs/windows
+        function broadcastUpdate(type, data) {
+            localStorage.setItem('lastUpdate', Date.now());
+            window.dispatchEvent(new CustomEvent('dataUpdate', { 
+                detail: { type, data } 
+            }));
+        }
+        
+        // Listen for updates from other tabs
+        window.addEventListener('dataUpdate', function(e) {
+            if (e.detail.type === 'memories') {
+                memories = JSON.parse(localStorage.getItem('sharedWeddingMemories') || '[]');
+                updateStats();
+                displayGallery();
+            } else if (e.detail.type === 'wishes') {
+                wishes = JSON.parse(localStorage.getItem('sharedWeddingWishes') || '[]');
+                updateStats();
+                displayWishes();
+            }
+        });
     </script>
 </body>
 </html>
