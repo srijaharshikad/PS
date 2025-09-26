@@ -1076,7 +1076,10 @@
             // Try localStorage first
             try {
                 const data = localStorage.getItem(STORAGE_KEYS[key]);
-                if (data) return JSON.parse(data);
+                if (data) {
+                    console.log(`Loaded ${key} from localStorage:`, JSON.parse(data).length, 'items');
+                    return JSON.parse(data);
+                }
             } catch (e) {
                 console.log('localStorage load failed:', e);
             }
@@ -1084,18 +1087,16 @@
             // Try sessionStorage as backup
             try {
                 const data = sessionStorage.getItem(STORAGE_KEYS[key]);
-                if (data) return JSON.parse(data);
+                if (data) {
+                    console.log(`Loaded ${key} from sessionStorage:`, JSON.parse(data).length, 'items');
+                    return JSON.parse(data);
+                }
             } catch (e) {
                 console.log('sessionStorage load failed:', e);
             }
             
-            // Try IndexedDB as final fallback
-            try {
-                return loadFromIndexedDB(key);
-            } catch (e) {
-                console.log('IndexedDB load failed:', e);
-                return [];
-            }
+            console.log(`No data found for ${key}, returning empty array`);
+            return [];
         }
         
         // IndexedDB functions for persistent storage
@@ -1308,8 +1309,20 @@
 
         function handleFileSelect(event) {
             selectedFiles = Array.from(event.target.files);
+            console.log('Files selected:', selectedFiles.length, selectedFiles.map(f => f.name));
+            
             if (selectedFiles.length > 0) {
                 document.getElementById('uploadForm').style.display = 'block';
+                
+                // Show selected files
+                const fileList = selectedFiles.map(f => `${f.name} (${(f.size / 1024 / 1024).toFixed(2)}MB)`).join(', ');
+                console.log('Selected files:', fileList);
+                
+                // Update upload area text to show selected files
+                const uploadText = document.querySelector('.upload-text');
+                if (uploadText) {
+                    uploadText.textContent = `${selectedFiles.length} file${selectedFiles.length > 1 ? 's' : ''} selected`;
+                }
             }
         }
 
@@ -1326,14 +1339,24 @@
             e.preventDefault();
             e.currentTarget.classList.remove('dragover');
             selectedFiles = Array.from(e.dataTransfer.files);
+            console.log('Files dropped:', selectedFiles.length, selectedFiles.map(f => f.name));
+            
             if (selectedFiles.length > 0) {
                 document.getElementById('uploadForm').style.display = 'block';
+                
+                // Update upload area text to show dropped files
+                const uploadText = document.querySelector('.upload-text');
+                if (uploadText) {
+                    uploadText.textContent = `${selectedFiles.length} file${selectedFiles.length > 1 ? 's' : ''} ready to upload`;
+                }
             }
         }
 
         function submitUpload() {
             const name = document.getElementById('uploaderName').value.trim();
             const message = document.getElementById('uploaderMessage').value.trim();
+            
+            console.log('Submit upload called with:', { name, message, filesCount: selectedFiles.length });
             
             if (!name) {
                 alert('Please enter your name');
@@ -1345,56 +1368,80 @@
                 return;
             }
             
-            // Simulate upload progress
+            // Show upload progress
             const progressDiv = document.getElementById('uploadProgress');
             const progressFill = document.getElementById('progressFill');
             progressDiv.style.display = 'block';
             
-            let progress = 0;
-            const interval = setInterval(() => {
-                progress += Math.random() * 30;
-                if (progress >= 100) {
-                    progress = 100;
-                    clearInterval(interval);
+            let filesProcessed = 0;
+            const totalFiles = selectedFiles.length;
+            
+            // Process each file
+            selectedFiles.forEach((file, index) => {
+                console.log('Processing file:', file.name, file.type, file.size);
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const memory = {
+                        id: 'upload_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9),
+                        name: name,
+                        message: message,
+                        type: file.type.startsWith('image/') ? 'image' : 'video',
+                        data: e.target.result,
+                        filename: file.name,
+                        timestamp: new Date().toISOString(),
+                        views: 0
+                    };
                     
-                    // Process files
-                    selectedFiles.forEach(file => {
-                        const reader = new FileReader();
-                        reader.onload = function(e) {
-                            const memory = {
-                                id: Date.now() + Math.random(),
-                                name: name,
-                                message: message,
-                                type: file.type.startsWith('image/') ? 'image' : 'video',
-                                data: e.target.result,
-                                filename: file.name,
-                                timestamp: new Date().toISOString()
-                            };
+                    console.log('Memory created:', memory.id, memory.type, memory.filename);
+                    
+                    // Add to memories array
+                    memories.push(memory);
+                    
+                    filesProcessed++;
+                    const progress = (filesProcessed / totalFiles) * 100;
+                    progressFill.style.width = progress + '%';
+                    
+                    // When all files are processed
+                    if (filesProcessed === totalFiles) {
+                        console.log('All files processed, saving to storage...');
+                        
+                        // Save to storage
+                        saveToStorage('memories', memories);
+                        broadcastUpdate('memories', memories);
+                        
+                        // Update UI
+                        setTimeout(() => {
+                            progressDiv.style.display = 'none';
+                            progressFill.style.width = '0%';
+                            document.getElementById('uploadForm').style.display = 'none';
+                            document.getElementById('uploaderName').value = '';
+                            document.getElementById('uploaderMessage').value = '';
+                            document.getElementById('fileInput').value = '';
+                            selectedFiles = [];
                             
-                            memories.push(memory);
-                            saveToStorage('memories', memories);
-                            broadcastUpdate('memories', memories);
-                        };
-                        reader.readAsDataURL(file);
-                    });
-                    
-                    setTimeout(() => {
-                        progressDiv.style.display = 'none';
-                        progressFill.style.width = '0%';
-                        document.getElementById('uploadForm').style.display = 'none';
-                        document.getElementById('uploaderName').value = '';
-                        document.getElementById('uploaderMessage').value = '';
-                        document.getElementById('fileInput').value = '';
-                        selectedFiles = [];
-                        
-                        updateStats();
-                        displayGallery();
-                        
-                        alert('Memories uploaded successfully! 🎉');
-                    }, 1000);
-                }
-                progressFill.style.width = progress + '%';
-            }, 100);
+                            // Reset upload area text
+                            const uploadText = document.querySelector('.upload-text');
+                            if (uploadText) {
+                                uploadText.textContent = 'Click to upload or drag and drop';
+                            }
+                            
+                            updateStats();
+                            displayGallery();
+                            
+                            console.log('Upload completed successfully');
+                            alert(`🎉 Successfully uploaded ${totalFiles} file${totalFiles > 1 ? 's' : ''}!`);
+                        }, 500);
+                    }
+                };
+                
+                reader.onerror = function(error) {
+                    console.error('Error reading file:', file.name, error);
+                    alert('Error uploading ' + file.name + '. Please try again.');
+                };
+                
+                reader.readAsDataURL(file);
+            });
         }
 
         function submitWish() {
@@ -1441,27 +1488,32 @@
             const galleryGrid = document.getElementById('galleryGrid');
             const emptyGallery = document.getElementById('emptyGallery');
             
+            console.log('Displaying gallery with', memories.length, 'memories');
+            
             // Track gallery view
             trackView('gallery');
             
             if (memories.length === 0) {
+                console.log('No memories found, showing empty gallery');
                 galleryGrid.style.display = 'none';
                 emptyGallery.style.display = 'block';
                 return;
             }
             
+            console.log('Showing gallery with memories:', memories.map(m => ({ id: m.id, name: m.name, type: m.type })));
             galleryGrid.style.display = 'grid';
             emptyGallery.style.display = 'none';
             
             galleryGrid.innerHTML = memories.map(memory => `
                 <div class="gallery-item" onclick="previewMemory('${memory.id}')">
                     ${memory.type === 'image' 
-                        ? `<img src="${memory.data}" alt="Memory" class="gallery-image">`
-                        : `<video src="${memory.data}" class="gallery-video" muted></video>`
+                        ? `<img src="${memory.data}" alt="Memory" class="gallery-image" onerror="console.error('Failed to load image:', '${memory.filename}')">`
+                        : `<video src="${memory.data}" class="gallery-video" muted onerror="console.error('Failed to load video:', '${memory.filename}')"></video>`
                     }
                     <div class="gallery-info">
                         <div class="gallery-name">${memory.name}</div>
                         ${memory.message ? `<div class="gallery-message">${memory.message}</div>` : ''}
+                        <div style="font-size: 0.8rem; color: #9ca3af;">${memory.type === 'video' ? '🎥' : '📸'} ${memory.filename}</div>
                     </div>
                 </div>
             `).join('');
