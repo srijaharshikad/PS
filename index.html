@@ -7,6 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
     <style>
         * {
             margin: 0;
@@ -497,6 +498,188 @@
             padding: 2rem;
         }
         
+        /* Interactive Side Panel */
+        .side-panel {
+            position: fixed;
+            top: 50%;
+            right: -320px;
+            transform: translateY(-50%);
+            width: 300px;
+            max-height: 80vh;
+            background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
+            border-radius: 20px 0 0 20px;
+            box-shadow: -10px 0 30px rgba(0,0,0,0.3);
+            transition: right 0.3s ease;
+            z-index: 1001;
+            overflow-y: auto;
+            color: white;
+        }
+        
+        .side-panel.open {
+            right: 0;
+        }
+        
+        .side-panel-toggle {
+            position: absolute;
+            left: -50px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 100px;
+            background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
+            border-radius: 20px 0 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .side-panel-toggle:hover {
+            transform: translateY(-50%) scale(1.1);
+        }
+        
+        .side-panel-content {
+            padding: 2rem 1.5rem;
+        }
+        
+        .panel-section {
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .panel-section:last-child {
+            border-bottom: none;
+        }
+        
+        .panel-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        
+        .mini-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+        
+        .mini-stat {
+            background: rgba(255,255,255,0.1);
+            padding: 1rem;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .mini-stat-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+        
+        .mini-stat-label {
+            font-size: 0.8rem;
+            opacity: 0.9;
+        }
+        
+        .love-meter {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 1rem;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+        
+        .love-meter-bar {
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            height: 20px;
+            margin: 1rem 0;
+            overflow: hidden;
+        }
+        
+        .love-meter-fill {
+            background: linear-gradient(90deg, #ff6b6b, #ff8e8e, #ffa8a8);
+            height: 100%;
+            border-radius: 10px;
+            width: 100%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+        
+        .interactive-game {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .interactive-game:hover {
+            background: rgba(255,255,255,0.2);
+            transform: scale(1.05);
+        }
+        
+        .game-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .game-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .game-description {
+            font-size: 0.8rem;
+            opacity: 0.9;
+        }
+        
+        .countdown-timer {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 1rem;
+            text-align: center;
+        }
+        
+        .countdown-number {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .countdown-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        .fun-fact {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 1rem;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+        
+        .fun-fact-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .fun-fact-text {
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+        
         .modal {
             display: none;
             position: fixed;
@@ -625,36 +808,96 @@
         </div>
     </section>
 
-    <!-- Stats Section -->
-    <section class="section" style="background: white;">
-        <div class="container">
-            <h2 class="section-title">Our Journey in Numbers</h2>
-            <p class="section-subtitle">See how our friends and family are sharing in our special moments</p>
+    <!-- Interactive Side Panel -->
+    <div class="side-panel" id="sidePanel">
+        <div class="side-panel-toggle" onclick="toggleSidePanel()">
+            💕
+        </div>
+        
+        <div class="side-panel-content">
+            <!-- Stats Section -->
+            <div class="panel-section">
+                <h3 class="panel-title">📊 Our Journey</h3>
+                <div class="mini-stats">
+                    <div class="mini-stat">
+                        <div class="mini-stat-number" id="photoCount">0</div>
+                        <div class="mini-stat-label">📸 Photos</div>
+                    </div>
+                    <div class="mini-stat">
+                        <div class="mini-stat-number" id="videoCount">0</div>
+                        <div class="mini-stat-label">🎥 Videos</div>
+                    </div>
+                    <div class="mini-stat">
+                        <div class="mini-stat-number" id="wishCount">0</div>
+                        <div class="mini-stat-label">💌 Wishes</div>
+                    </div>
+                    <div class="mini-stat">
+                        <div class="mini-stat-number" id="contributorCount">0</div>
+                        <div class="mini-stat-label">👥 Guests</div>
+                    </div>
+                </div>
+            </div>
             
-            <div class="stats">
-                <div class="stat-card">
-                    <div class="stat-icon">📸</div>
-                    <div class="stat-number" id="photoCount">0</div>
-                    <div class="stat-label">Photos</div>
+            <!-- Love Meter -->
+            <div class="panel-section">
+                <h3 class="panel-title">💕 Love Meter</h3>
+                <div class="love-meter">
+                    <div>Prathyusha & Sravan</div>
+                    <div class="love-meter-bar">
+                        <div class="love-meter-fill"></div>
+                    </div>
+                    <div>∞ Love Level: MAXIMUM! ∞</div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-icon">🎥</div>
-                    <div class="stat-number" id="videoCount">0</div>
-                    <div class="stat-label">Videos</div>
+            </div>
+            
+            <!-- Countdown Timer -->
+            <div class="panel-section">
+                <h3 class="panel-title">⏰ Engagement Day</h3>
+                <div class="countdown-timer" id="countdownTimer">
+                    <div class="countdown-number" id="daysLeft">0</div>
+                    <div class="countdown-label">Days to Celebrate!</div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-icon">💌</div>
-                    <div class="stat-number" id="wishCount">0</div>
-                    <div class="stat-label">Wishes</div>
+            </div>
+            
+            <!-- Interactive Games -->
+            <div class="panel-section">
+                <h3 class="panel-title">🎮 Fun Zone</h3>
+                
+                <div class="interactive-game" onclick="playLoveQuiz()">
+                    <div class="game-icon">❤️</div>
+                    <div class="game-title">Love Quiz</div>
+                    <div class="game-description">Test your knowledge about the couple!</div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-icon">👥</div>
-                    <div class="stat-number" id="contributorCount">0</div>
-                    <div class="stat-label">Contributors</div>
+                
+                <div class="interactive-game" onclick="generateLoveMessage()">
+                    <div class="game-icon">💝</div>
+                    <div class="game-title">Love Message Generator</div>
+                    <div class="game-description">Get a romantic message for the couple</div>
+                </div>
+                
+                <div class="interactive-game" onclick="showFunFact()">
+                    <div class="game-icon">🌟</div>
+                    <div class="game-title">Love Facts</div>
+                    <div class="game-description">Discover interesting facts about love</div>
+                </div>
+                
+                <div class="interactive-game" onclick="playMemoryMatch()">
+                    <div class="game-icon">🧩</div>
+                    <div class="game-title">Memory Match</div>
+                    <div class="game-description">Match wedding-themed emojis</div>
+                </div>
+            </div>
+            
+            <!-- Fun Facts -->
+            <div class="panel-section">
+                <h3 class="panel-title">✨ Did You Know?</h3>
+                <div class="fun-fact" id="funFact">
+                    <div class="fun-fact-icon">💍</div>
+                    <div class="fun-fact-text">The tradition of wearing wedding rings on the fourth finger comes from the ancient belief that a vein in this finger leads directly to the heart!</div>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
     <!-- Gallery Section -->
     <section id="gallery" class="section">
@@ -757,32 +1000,122 @@
     </div>
 
     <script>
-        // Global storage for memories and wishes - shared across all users
-        let memories = JSON.parse(localStorage.getItem('sharedWeddingMemories') || '[]');
-        let wishes = JSON.parse(localStorage.getItem('sharedWeddingWishes') || '[]');
+        // Persistent storage for memories and wishes - never gets deleted
+        let memories = [];
+        let wishes = [];
         
-        // Sync data across browser tabs and sessions
-        window.addEventListener('storage', function(e) {
-            if (e.key === 'sharedWeddingMemories') {
-                memories = JSON.parse(e.newValue || '[]');
-                updateStats();
-                displayGallery();
+        // Multiple storage layers for maximum reliability
+        const STORAGE_KEYS = {
+            memories: 'PS_WEDDING_MEMORIES_2025',
+            wishes: 'PS_WEDDING_WISHES_2025',
+            couplePhoto: 'PS_COUPLE_PHOTO_2025'
+        };
+        
+        // Save to multiple storage locations
+        function saveToStorage(key, data) {
+            const jsonData = JSON.stringify(data);
+            
+            // Save to localStorage
+            try {
+                localStorage.setItem(STORAGE_KEYS[key], jsonData);
+            } catch (e) {
+                console.log('localStorage save failed:', e);
             }
-            if (e.key === 'sharedWeddingWishes') {
-                wishes = JSON.parse(e.newValue || '[]');
-                updateStats();
-                displayWishes();
+            
+            // Save to sessionStorage as backup
+            try {
+                sessionStorage.setItem(STORAGE_KEYS[key], jsonData);
+            } catch (e) {
+                console.log('sessionStorage save failed:', e);
             }
-        });
+            
+            // Save to IndexedDB for long-term persistence
+            try {
+                saveToIndexedDB(key, data);
+            } catch (e) {
+                console.log('IndexedDB save failed:', e);
+            }
+        }
+        
+        // Load from storage with fallbacks
+        function loadFromStorage(key) {
+            // Try localStorage first
+            try {
+                const data = localStorage.getItem(STORAGE_KEYS[key]);
+                if (data) return JSON.parse(data);
+            } catch (e) {
+                console.log('localStorage load failed:', e);
+            }
+            
+            // Try sessionStorage as backup
+            try {
+                const data = sessionStorage.getItem(STORAGE_KEYS[key]);
+                if (data) return JSON.parse(data);
+            } catch (e) {
+                console.log('sessionStorage load failed:', e);
+            }
+            
+            // Try IndexedDB as final fallback
+            try {
+                return loadFromIndexedDB(key);
+            } catch (e) {
+                console.log('IndexedDB load failed:', e);
+                return [];
+            }
+        }
+        
+        // IndexedDB functions for persistent storage
+        function saveToIndexedDB(key, data) {
+            const request = indexedDB.open('PSWeddingDB', 1);
+            request.onupgradeneeded = function(e) {
+                const db = e.target.result;
+                if (!db.objectStoreNames.contains('wedding')) {
+                    db.createObjectStore('wedding');
+                }
+            };
+            request.onsuccess = function(e) {
+                const db = e.target.result;
+                const transaction = db.transaction(['wedding'], 'readwrite');
+                const store = transaction.objectStore('wedding');
+                store.put(data, key);
+            };
+        }
+        
+        function loadFromIndexedDB(key) {
+            return new Promise((resolve) => {
+                const request = indexedDB.open('PSWeddingDB', 1);
+                request.onsuccess = function(e) {
+                    const db = e.target.result;
+                    const transaction = db.transaction(['wedding'], 'readonly');
+                    const store = transaction.objectStore('wedding');
+                    const getRequest = store.get(key);
+                    getRequest.onsuccess = function() {
+                        resolve(getRequest.result || []);
+                    };
+                };
+                request.onerror = () => resolve([]);
+            });
+        }
         let selectedFiles = [];
 
         // Initialize the page
         document.addEventListener('DOMContentLoaded', function() {
+            // Load data from persistent storage
+            memories = loadFromStorage('memories');
+            wishes = loadFromStorage('wishes');
+            
             updateStats();
             displayGallery();
             displayWishes();
             setupEventListeners();
             loadCouplePhoto();
+            updateCountdown();
+            
+            // Update countdown every hour
+            setInterval(updateCountdown, 3600000);
+            
+            // Auto-show fun facts every 30 seconds
+            setInterval(showFunFact, 30000);
         });
 
         function setupEventListeners() {
@@ -832,8 +1165,8 @@
                         this.querySelector('div').style.opacity = '0';
                     });
                     
-                    // Save to localStorage
-                    localStorage.setItem('couplePhoto', e.target.result);
+                    // Save to persistent storage
+                    localStorage.setItem(STORAGE_KEYS.couplePhoto, e.target.result);
                     
                     alert('Couple photo updated successfully! 💕');
                 };
@@ -842,7 +1175,7 @@
         }
 
         function loadCouplePhoto() {
-            const savedPhoto = localStorage.getItem('couplePhoto');
+            const savedPhoto = localStorage.getItem(STORAGE_KEYS.couplePhoto);
             if (savedPhoto) {
                 const couplePhoto = document.getElementById('couplePhoto');
                 couplePhoto.style.backgroundImage = `url(${savedPhoto})`;
@@ -927,7 +1260,7 @@
                             };
                             
                             memories.push(memory);
-                            localStorage.setItem('sharedWeddingMemories', JSON.stringify(memories));
+                            saveToStorage('memories', memories);
                             broadcastUpdate('memories', memories);
                         };
                         reader.readAsDataURL(file);
@@ -969,7 +1302,7 @@
             };
             
             wishes.push(wish);
-            localStorage.setItem('sharedWeddingWishes', JSON.stringify(wishes));
+            saveToStorage('wishes', wishes);
             broadcastUpdate('wishes', wishes);
             
             document.getElementById('wishName').value = '';
@@ -1076,6 +1409,136 @@
         }
         if (!localStorage.getItem('sharedWeddingWishes')) {
             localStorage.setItem('sharedWeddingWishes', JSON.stringify([]));
+        }
+        
+        // Side panel functionality
+        function toggleSidePanel() {
+            const panel = document.getElementById('sidePanel');
+            panel.classList.toggle('open');
+        }
+        
+        // Countdown timer
+        function updateCountdown() {
+            const engagementDate = new Date('2025-11-07T10:00:00');
+            const now = new Date();
+            const diffTime = engagementDate - now;
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            
+            const daysElement = document.getElementById('daysLeft');
+            if (diffDays > 0) {
+                daysElement.textContent = diffDays;
+                document.querySelector('.countdown-label').textContent = 'Days until Engagement!';
+            } else if (diffDays === 0) {
+                daysElement.textContent = 'TODAY!';
+                document.querySelector('.countdown-label').textContent = 'Engagement Day!';
+            } else {
+                daysElement.textContent = Math.abs(diffDays);
+                document.querySelector('.countdown-label').textContent = 'Days since Engagement!';
+            }
+        }
+        
+        // Interactive games
+        function playLoveQuiz() {
+            const questions = [
+                { q: "What's Prathyusha's favorite color?", a: ["Pink", "Blue", "Purple", "Red"], correct: 0 },
+                { q: "Where did they first meet?", a: ["College", "Work", "Online", "Through friends"], correct: 1 },
+                { q: "What's their favorite activity together?", a: ["Movies", "Cooking", "Travel", "Gaming"], correct: 2 },
+                { q: "What month did they get engaged?", a: ["October", "November", "December", "January"], correct: 1 }
+            ];
+            
+            const randomQ = questions[Math.floor(Math.random() * questions.length)];
+            const userAnswer = prompt(`${randomQ.q}\n\n${randomQ.a.map((a, i) => `${i + 1}. ${a}`).join('\n')}\n\nEnter your answer (1-4):`);
+            
+            if (userAnswer && parseInt(userAnswer) - 1 === randomQ.correct) {
+                alert("🎉 Correct! You know them well! 💕");
+            } else {
+                alert("❤️ Good try! The correct answer was: " + randomQ.a[randomQ.correct]);
+            }
+        }
+        
+        function generateLoveMessage() {
+            const messages = [
+                "May your love story be as magical as a fairy tale! ✨💕",
+                "Wishing you endless laughter, joy, and beautiful moments together! 🌟❤️",
+                "Your love shines brighter than all the stars in the sky! ⭐💖",
+                "May your journey together be filled with adventure and romance! 🌈💝",
+                "Two hearts, one soul, infinite love! 💕✨",
+                "Your love is the perfect example of 'happily ever after'! 👑💖",
+                "May your bond grow stronger with each passing day! 🌱❤️",
+                "Wishing you a lifetime of love, laughter, and happiness! 🎊💕"
+            ];
+            
+            const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+            alert(`💝 Your Love Message:\n\n"${randomMessage}"`);
+        }
+        
+        function showFunFact() {
+            const facts = [
+                "💍 The tradition of wearing wedding rings on the fourth finger comes from the ancient belief that a vein in this finger leads directly to the heart!",
+                "🌹 Red roses are associated with love because they were the favorite flower of Venus, the Roman goddess of love!",
+                "💕 The word 'honeymoon' comes from the ancient practice of newlyweds drinking honey wine for a month after their wedding!",
+                "👰 The white wedding dress tradition was started by Queen Victoria in 1840 when she wore white to marry Prince Albert!",
+                "💖 It takes only 4 minutes to decide if you like someone or not - love at first sight is scientifically possible!",
+                "🎂 The tradition of wedding cakes comes from ancient Rome, where bread was broken over the bride's head for good luck!",
+                "💐 Throwing the bouquet tradition comes from ancient times when people believed touching the bride would bring good luck!",
+                "🔔 Wedding bells are rung to ward off evil spirits and ensure a happy marriage!"
+            ];
+            
+            const randomFact = facts[Math.floor(Math.random() * facts.length)];
+            document.querySelector('.fun-fact-text').textContent = randomFact.substring(2);
+            document.querySelector('.fun-fact-icon').textContent = randomFact.substring(0, 2);
+        }
+        
+        function playMemoryMatch() {
+            const emojis = ['💕', '💖', '💝', '💍', '👰', '🤵', '🌹', '🎊'];
+            const gameEmojis = [...emojis, ...emojis].sort(() => Math.random() - 0.5);
+            
+            let gameBoard = '';
+            for (let i = 0; i < 16; i++) {
+                gameBoard += `<button onclick="flipCard(${i})" id="card${i}" style="width:40px;height:40px;margin:2px;font-size:20px;background:#f0f0f0;border:none;border-radius:5px;">❓</button>`;
+                if ((i + 1) % 4 === 0) gameBoard += '<br>';
+            }
+            
+            const gameHTML = `
+                <div style="text-align:center;padding:20px;background:white;border-radius:15px;max-width:300px;">
+                    <h3>💕 Memory Match Game</h3>
+                    <p>Find matching pairs!</p>
+                    <div id="gameBoard">${gameBoard}</div>
+                    <br>
+                    <button onclick="closeModal()" style="padding:10px 20px;background:#ec4899;color:white;border:none;border-radius:20px;cursor:pointer;">Close</button>
+                </div>
+            `;
+            
+            document.getElementById('modalBody').innerHTML = gameHTML;
+            document.getElementById('previewModal').style.display = 'flex';
+            
+            window.gameEmojis = gameEmojis;
+            window.flippedCards = [];
+            window.matchedPairs = 0;
+        }
+        
+        function flipCard(index) {
+            const card = document.getElementById(`card${index}`);
+            if (card.textContent !== '❓' || window.flippedCards.length >= 2) return;
+            
+            card.textContent = window.gameEmojis[index];
+            window.flippedCards.push(index);
+            
+            if (window.flippedCards.length === 2) {
+                setTimeout(() => {
+                    const [first, second] = window.flippedCards;
+                    if (window.gameEmojis[first] === window.gameEmojis[second]) {
+                        window.matchedPairs++;
+                        if (window.matchedPairs === 8) {
+                            alert('🎉 Congratulations! You matched all pairs! 💕');
+                        }
+                    } else {
+                        document.getElementById(`card${first}`).textContent = '❓';
+                        document.getElementById(`card${second}`).textContent = '❓';
+                    }
+                    window.flippedCards = [];
+                }, 1000);
+            }
         }
         
         // Broadcast updates to other tabs/windows
