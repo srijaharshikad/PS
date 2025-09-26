@@ -838,6 +838,29 @@
                 </div>
             </div>
             
+            <!-- Analytics Section -->
+            <div class="panel-section">
+                <h3 class="panel-title">📈 Analytics</h3>
+                <div class="mini-stats" id="analyticsDisplay">
+                    <div class="mini-stat">
+                        <div class="mini-stat-number" id="totalViews">0</div>
+                        <div class="mini-stat-label">👁️ Views</div>
+                    </div>
+                    <div class="mini-stat">
+                        <div class="mini-stat-number" id="uniqueVisitors">0</div>
+                        <div class="mini-stat-label">🌟 Visitors</div>
+                    </div>
+                    <div class="mini-stat">
+                        <div class="mini-stat-number" id="videoViewCount">0</div>
+                        <div class="mini-stat-label">📺 Video Views</div>
+                    </div>
+                    <div class="mini-stat">
+                        <div class="mini-stat-number" id="gameInteractions">0</div>
+                        <div class="mini-stat-label">🎮 Games</div>
+                    </div>
+                </div>
+            </div>
+            
             <!-- Love Meter -->
             <div class="panel-section">
                 <h3 class="panel-title">💕 Love Meter</h3>
@@ -1008,7 +1031,18 @@
         const STORAGE_KEYS = {
             memories: 'PS_WEDDING_MEMORIES_2025',
             wishes: 'PS_WEDDING_WISHES_2025',
-            couplePhoto: 'PS_COUPLE_PHOTO_2025'
+            couplePhoto: 'PS_COUPLE_PHOTO_2025',
+            analytics: 'PS_WEDDING_ANALYTICS_2025'
+        };
+        
+        // Analytics tracking
+        let analytics = {
+            totalViews: 0,
+            videoViews: 0,
+            galleryViews: 0,
+            gameInteractions: 0,
+            uniqueVisitors: new Set(),
+            lastVisit: null
         };
         
         // Save to multiple storage locations
@@ -1098,11 +1132,89 @@
         }
         let selectedFiles = [];
 
+        // Analytics functions
+        function trackView(type = 'page') {
+            try {
+                const savedAnalytics = JSON.parse(localStorage.getItem(STORAGE_KEYS.analytics) || '{}');
+                analytics = { ...analytics, ...savedAnalytics };
+                
+                // Convert Set back from array if it was saved
+                if (savedAnalytics.uniqueVisitors && Array.isArray(savedAnalytics.uniqueVisitors)) {
+                    analytics.uniqueVisitors = new Set(savedAnalytics.uniqueVisitors);
+                }
+                
+                // Generate visitor ID
+                const visitorId = localStorage.getItem('PS_VISITOR_ID') || 
+                    'visitor_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                localStorage.setItem('PS_VISITOR_ID', visitorId);
+                
+                // Track this visit
+                analytics.uniqueVisitors.add(visitorId);
+                analytics.totalViews++;
+                analytics.lastVisit = new Date().toISOString();
+                
+                if (type === 'video') analytics.videoViews++;
+                if (type === 'gallery') analytics.galleryViews++;
+                if (type === 'game') analytics.gameInteractions++;
+                
+                // Save analytics (convert Set to Array for JSON)
+                const analyticsToSave = {
+                    ...analytics,
+                    uniqueVisitors: Array.from(analytics.uniqueVisitors)
+                };
+                localStorage.setItem(STORAGE_KEYS.analytics, JSON.stringify(analyticsToSave));
+                
+                updateAnalyticsDisplay();
+            } catch (e) {
+                console.log('Analytics tracking failed:', e);
+            }
+        }
+        
+        function updateAnalyticsDisplay() {
+            // Update individual analytics elements
+            document.getElementById('totalViews').textContent = analytics.totalViews;
+            document.getElementById('uniqueVisitors').textContent = analytics.uniqueVisitors.size;
+            document.getElementById('videoViewCount').textContent = analytics.videoViews;
+            document.getElementById('gameInteractions').textContent = analytics.gameInteractions;
+        }
+        
+        function addDefaultVideo() {
+            // Check if default video already exists
+            const hasDefaultVideo = memories.some(m => m.isDefault && m.filename === 'Save-the-Date-Video.mp4');
+            
+            if (!hasDefaultVideo) {
+                const defaultVideo = {
+                    id: 'default_save_the_date_' + Date.now(),
+                    name: "Prathyusha & Sravan",
+                    message: "Save the Date - November 7, 2025 💕",
+                    type: "video",
+                    data: "https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4", // Placeholder video
+                    filename: "Save-the-Date-Video.mp4",
+                    timestamp: new Date().toISOString(),
+                    isDefault: true,
+                    views: 0,
+                    note: "Upload your actual Save the Date video to replace this placeholder"
+                };
+                
+                // Add to beginning of memories array
+                memories.unshift(defaultVideo);
+                saveToStorage('memories', memories);
+                
+                console.log('Default Save the Date video added to gallery');
+            }
+        }
+
         // Initialize the page
         document.addEventListener('DOMContentLoaded', function() {
+            // Track page view
+            trackView('page');
+            
             // Load data from persistent storage
             memories = loadFromStorage('memories');
             wishes = loadFromStorage('wishes');
+            
+            // Add default video if not present
+            addDefaultVideo();
             
             updateStats();
             displayGallery();
@@ -1329,6 +1441,9 @@
             const galleryGrid = document.getElementById('galleryGrid');
             const emptyGallery = document.getElementById('emptyGallery');
             
+            // Track gallery view
+            trackView('gallery');
+            
             if (memories.length === 0) {
                 galleryGrid.style.display = 'none';
                 emptyGallery.style.display = 'block';
@@ -1377,16 +1492,26 @@
             const memory = memories.find(m => m.id == id);
             if (!memory) return;
             
+            // Track video views
+            if (memory.type === 'video') {
+                trackView('video');
+                
+                // Update individual video view count
+                memory.views = (memory.views || 0) + 1;
+                saveToStorage('memories', memories);
+            }
+            
             const modal = document.getElementById('previewModal');
             const modalBody = document.getElementById('modalBody');
             
             modalBody.innerHTML = `
                 ${memory.type === 'image' 
                     ? `<img src="${memory.data}" style="width: 100%; border-radius: 0.5rem; margin-bottom: 1rem;">`
-                    : `<video src="${memory.data}" controls style="width: 100%; border-radius: 0.5rem; margin-bottom: 1rem;"></video>`
+                    : `<video src="${memory.data}" controls autoplay style="width: 100%; border-radius: 0.5rem; margin-bottom: 1rem;"></video>`
                 }
                 <h4 style="margin-bottom: 0.5rem;">Shared by ${memory.name}</h4>
-                ${memory.message ? `<p style="color: #6b7280;">${memory.message}</p>` : ''}
+                ${memory.message ? `<p style="color: #6b7280; margin-bottom: 0.5rem;">${memory.message}</p>` : ''}
+                ${memory.type === 'video' ? `<p style="color: #9ca3af; font-size: 0.8rem;">👁️ Views: ${memory.views || 1}</p>` : ''}
             `;
             
             modal.style.display = 'flex';
@@ -1439,6 +1564,7 @@
         
         // Interactive games
         function playLoveQuiz() {
+            trackView('game');
             const questions = [
                 { q: "What's Prathyusha's favorite color?", a: ["Pink", "Blue", "Purple", "Red"], correct: 0 },
                 { q: "Where did they first meet?", a: ["College", "Work", "Online", "Through friends"], correct: 1 },
@@ -1457,6 +1583,7 @@
         }
         
         function generateLoveMessage() {
+            trackView('game');
             const messages = [
                 "May your love story be as magical as a fairy tale! ✨💕",
                 "Wishing you endless laughter, joy, and beautiful moments together! 🌟❤️",
@@ -1473,6 +1600,7 @@
         }
         
         function showFunFact() {
+            trackView('game');
             const facts = [
                 "💍 The tradition of wearing wedding rings on the fourth finger comes from the ancient belief that a vein in this finger leads directly to the heart!",
                 "🌹 Red roses are associated with love because they were the favorite flower of Venus, the Roman goddess of love!",
@@ -1490,6 +1618,7 @@
         }
         
         function playMemoryMatch() {
+            trackView('game');
             const emojis = ['💕', '💖', '💝', '💍', '👰', '🤵', '🌹', '🎊'];
             const gameEmojis = [...emojis, ...emojis].sort(() => Math.random() - 0.5);
             
